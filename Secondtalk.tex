@@ -1,0 +1,94 @@
+\documentclass{report}
+
+\input Latex_macros/Definitionen.tex
+
+\usepackage{a4}
+\usepackage[all]{xy}
+\usepackage{enumerate}
+\usepackage{xr}
+
+
+\begin{document}
+
+\title{XXX}
+\author{Ji Pengyun\\
+  \href{http://www.swan.ac.uk/compsci/}{Computer Science Department}, \href{http://www.swan.ac.uk/science/}{College of Science}\\
+   \href{http://www.swan.ac.uk/}{Swansea University, UK}\\
+  {\small \url{http://www.swan.ac.uk/NOT_YET}}
+}
+
+
+
+\maketitle
+
+\tableofcontents
+
+\chapter{General preparations}
+\label{cha:Generalpreparations}
+
+
+\section{Second talk at MRes seminar}
+\label{sec:SecondtalkMRes}
+
+\begin{defi}\label{def:cartesianprod}
+a sequence numbers $f_0, f_1, f_2,...f_n, n\in N$ is defined as Fibonacci numbers if
+\begin{align*}
+f_0& = 0;\\
+f_1& = 1;\\
+\text{for every}\quad n \geqslant 2, f_n& = f_{n-2}+f_{n-1}.
+\end{align*}
+\end{defi}
+Now I give the formula I want to proof.
+
+\begin{thm}\label{thm:propprod}
+Consider $f_n$is the $n^{th}$ Fibonacci number, then
+\begin{displaymath}
+f_n=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^n-\left(\frac{1-\sqrt{5}}{2}\right)^n}{\sqrt{5}}.
+\end{displaymath}
+\end{thm}
+The proofs involve Fibonacci numbers it require strong induction rather than ordinary induction.
+Because for example starting at $n=2$, $f_2 = f_0 + f_1 = 0+1 = 1$, $f_3 = f_1 + f_2 = 1 + 1 = 2$, $f_4 = f_2 + f_3 = 1 + 2 = 3$ ... Each Fibonacci number is computed not only using the previous number in the sequence, but also the one before that. In which sense the recursion method is strong. That's why we use strong induction in the proofs.
+\\
+\newline
+\begin{prf}
+Given the formula want to proof, based on the definition check $n=0,n=1$, then assume that
+the formula is correct for $f_{n-2}$ and $f_{n-1}$ to prove $f_n$
+
+Base Case 1. $n=0$, then
+\[
+f_0=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^0-\left(\frac{1-\sqrt{5}}{2}\right)^0}{\sqrt{5}}
+=\frac{1-1}{\sqrt{5}}=0
+\]
+
+Base Case 2. $n=1$, then
+\[
+f_1=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^1-\left(\frac{1-\sqrt{5}}{2}\right)^1}{\sqrt{5}}
+=\frac{\sqrt{5}}{\sqrt{5}}=1
+\]
+
+Induction Step $n\geqslant2$ then applying the inductive hypothesis to $n-2$ and $n-1$
+\begin{align*}
+f_n&=f_{n-2}+f_{n-1}\\
+&=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n-2}-\left(\frac{1-\sqrt{5}}{2}\right)^{n-2}}{\sqrt{5}}+
+\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n-1}-\left(\frac{1-\sqrt{5}}{2}\right)^{n-1}}{\sqrt{5}}\\
+&=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n-2}+\left(\frac{1-\sqrt{5}}{2}\right)^{n-1}-
+\left[\left(\frac{1-\sqrt{5}}{2}\right)^{n-2}-\left(\frac{1-\sqrt{5}}{2}\right)^{n-1}\right]}{\sqrt{5}}\\
+&=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n-2}\left(1+\frac{1+\sqrt{5}}{2}\right)-\left(\frac{1-\sqrt{5}}{2}\right)^{n-2}\left(1+\frac{1-\sqrt{5}}{2}\right)}{\sqrt{5}}\\
+\end{align*}
+note that
+\begin{align*}
+\left(\frac{1+\sqrt{5}}{2}\right)^2&=\frac{1+2\sqrt{5}+5}{4}=\frac{6+2\sqrt{5}}{4}=\frac{3+\sqrt{5}}{2}=1+\frac{1+\sqrt{5}}{2}\\
+\left(\frac{1-\sqrt{5}}{2}\right)^2&=1+\frac{1-\sqrt{5}}{2}
+\end{align*}
+substitute into the formula
+\[
+f_n=\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n-2}\left(\frac{1+\sqrt{5}}{2}\right)^{2}-
+\left(\frac{1-\sqrt{5}}{2}\right)^{n-2}\left(\frac{1-\sqrt{5}}{2}\right)^{2}}{\sqrt{5}}=
+\frac{\left(\frac{1+\sqrt{5}}{2}\right)^{n}-
+\left(\frac{1-\sqrt{5}}{2}\right)^{n}}{\sqrt{5}}
+\]
+
+\Qed
+\end{prf}
+
+\end{document}
