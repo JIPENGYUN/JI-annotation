@@ -1,0 +1,489 @@
+
+\documentclass{article}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{array}
+\usepackage{multirow}
+
+
+\def\dfrac#1#2{{\displaystyle\frac{#1}{#2}}}
+\def\bd#1{\boldsymbol{#1}}
+\def\mva{{\mathcal{VA}}}
+\def\mpass{{\mathcal{PASS}}}
+\def\mpv{{\mpass(\mva)}}
+\def\mcl{{\mathcal{CL}}}
+\def\mcls{{\mathcal{CLS}}}
+\def\mlit{{\mathcal{LIT}}}
+\def\msat{{\mathcal{SAT}}}
+\def\musat{{\mathcal{USAT}}}
+\def\pmva{{\pmb{\mathcal{VA}}}}
+\def\pmlit{{\pmb{\mathcal{LIT}}}}
+\def\pmpv{{\pmb{\mpass(\mva)}}}
+\def\pmcl{{\pmb{\mathcal{CL}}}}
+\def\pmcls{{\pmb{\mathcal{CLS}}}}
+\def\var{{\rm var}}
+\def\bvar{{\bf var}}
+
+
+\def\q{{\quad}}
+\def\d{{\rm d}}
+
+
+\setlength{\arraycolsep}{0.5mm}
+
+\newcommand{\yi}{\raisebox{-1pt}{\includegraphics{q1.eps}}}
+\newcommand{\er}{\raisebox{-1pt}{\includegraphics{q2.eps}}}
+\newcommand{\san}{\raisebox{-1pt}{\includegraphics{q3.eps}}}
+\newcommand{\si}{\raisebox{-1pt}{\includegraphics{q4.eps}}}
+
+
+\begin{document}
+
+
+
+
+\section{Conjunctive normal forms}%p4
+
+An important special case of propositional formulas are \textbf{propositional formulas in conjunctive normal form (CNF),} which are
+
+conjunctions of disjunctions of \textbf{literals,}\\ where a ``literal'' is a variable or a negated variable.
+
+Thus
+\begin{eqnarray*}
+&(a\vee b) \wedge (\neg a \vee c) \wedge (b\vee \neg c)& \\
+&a\wedge b \wedge c& \\
+&(\neg a \vee b) \wedge (\neg b \vee c) \wedge \neg c& \\
+&a \vee b \vee \neg c&
+\end{eqnarray*}
+are conjunctive normal forms, while
+\begin{eqnarray*}
+&a\vee (b \wedge c)&\\
+&\neg(a\vee b)& \\
+&a \wedge (b\vee (c\wedge d))&
+\end{eqnarray*}
+are not. 
+
+
+\section{Clause-sets}%p5
+
+The logical laws of compositions $\wedge$ and $\vee$ are commutative, that is
+\[
+a\wedge b \leftrightarrow b\wedge a, \quad  a\vee b \leftrightarrow b\vee a,
+\]
+and furthermore repeating a proposition doesn't make any change, i.e.,
+\[
+a\wedge a \leftrightarrow a, \quad  a\vee a \leftrightarrow a.
+\]
+Thus we can freely change the order of conjunctions and disjunctions in a CNF, and furthermore there is no need to repeat a part of a conjunction or disjunction.
+
+Altogether we see, that instead of using CNF's we can use \textbf{clause-sets}, where a clause-set is a set of \textbf{clauses}, and a  \textbf{clause} is a set of literals:
+\begin{eqnarray*}
+&(a\vee b) \wedge (\neg c\vee d) \rightsquigarrow \left\{ \; \{a,b\}, \{\overline{c}, d\} \; \right\}& \\
+& a\wedge b\wedge (\neg a \vee \neg b \vee \neg c) \rightsquigarrow \left\{ \; \{a\},\{b\}, \{\overline{a}, \overline{b}, \overline{c}\} \; \right\}&
+\end{eqnarray*}
+(Negation is now denoted more compactly by an over-line.)
+
+\section{Examples}%p6
+
+A clause-set $F$ is \textbf{satisfiable} iff there is an assignment $\varphi$ of truth-values to variables such that in every clause $C \in F$ there is at least one literal $x \in C$ getting truth value 1, i.e., $\varphi(x) = 1$, while otherwise $F$ is \textbf{unsatisfiable}.
+\begin{enumerate}
+\item $\left\{\{a\}, \{\overline{a}\}\right\}$ is unsatisfiable.
+\item $\left\{\{a,b\}, \{\overline{a},b\}, \{a, \overline{b}\}, \{\overline{a},\overline{b}\}\right\}$ is unsatisfiable.
+\item $\left\{\{a\}, \{\overline{a},b\}, \{\overline{a}, \overline{b}, c\}, \{\overline{a}, \overline{b}, \overline{c}\}\right\}$ is unsatisfiable.
+\end{enumerate}
+Removing any clause from any of the above examples we obtain a satisfiable clause-sets (thus the above examples are ``minimally unsatisfiable'').
+
+
+\section{II Variables}%p7
+
+Let $\pmva$ be a set of  \textbf{variables}.
+
+For the \textit{mathematical theory} it is important, that there are no restrictions on what a ``variable'' could be:
+\begin{itemize}
+\item $\mva$ may be empty (to handle exceptional cases);
+\item $\mva$ may be finite (for example the set of variables occurring in a conjunctive normal form);
+\item $\mva$ may be infinite, for example
+\begin{itemize}
+\item $\mva = \mathbb{N}$ as an abstraction from codings of variables by positive integers in SAT solvers;
+\item $\mva = \mathbb{R}$ might be useful for theoretical investigations.
+\end{itemize}
+\item On the mathematical level we are not interested in how to handle variables (creating new ones, identifying them, $\ldots$), but they are just \textit{given}.
+\end{itemize}
+
+\section{Literals}%p8
+
+The set $\pmlit(\pmva)$ of \textbf{literals} (over $\mva$) is defined as
+\[
+\pmlit(\pmva): = \mva \times \{0,1\}
+\]
+
+In other words, a literal $x$ is a pair $x = (v, \varepsilon)$ with $v \in \mva$ and $\varepsilon\in \{0,1\}$. The literal $x$ is
+\begin{itemize}
+\item[-] \textbf{positive} in case of $\varepsilon = 0$;
+\item[-] \textbf{negative} in case of $\varepsilon = 1$.
+\end{itemize}
+
+As customary, in case we are not especially interested in the underlying set $\mva$ of variables, we will just use $\mlit$ instead of $\mlit(\mva)$.
+
+\section{Literals II}%p9
+
+The operation
+\[
+({}^{\overline{~~}}): \mlit \to \mlit
+\]
+is defined by
+\[
+\overline{(v, \varepsilon)}: = (v, 1-\varepsilon).
+\]
+
+For a literal $x$ we call $\overline{{\bm x}}$ the \textbf{complement} of $x$. We have
+\[
+\forall x \in \mlit: \overline{\overline{x}} = x.
+\]
+(Corresponding to the ``law of double negation''.)
+
+The underlying variable of a literal $x = (v,\varepsilon)$ is extracted by
+\[
+\bvar(({\bm v}, {\bm \varepsilon})): = v.
+\]
+
+We \textit{identify} a literal $(v,0)$ with $v$, and thus we may write (by an abuse of language)
+\[
+\overline{{\bm v}}
+\]
+for the literal $(v, 1)$ (while $\overline{\overline{v}} = v$).
+
+\section{Examples}%p10
+
+Consider a variables $a\in \mva$.
+
+Using the identification of variables and positive literals, we have
+\begin{eqnarray*}
+&a = (a,0)& \\
+&\overline{a} = \overline{(a,0)} = (a,1)&\\
+&\overline{\overline{a}} = \overline{(a,1)} = (a,0) = a&
+\end{eqnarray*}
+and
+\begin{eqnarray*}
+&\var(a) = \var((a,0)) = a& \\
+&\var(\overline{a}) = \var((a,1)) = a. &
+\end{eqnarray*}
+
+\section{Implementing variables and literals}%p11
+
+For concrete implementations it is often efficient to identify
+\begin{eqnarray*}
+&\mva = \mathbb{N}&\\
+&\mlit = \mathbb{Z}\setminus \{0\}, &
+\end{eqnarray*}
+and to use the identification
+\[
+\overline{x} = -x
+\]
+for $x \in \mlit$.
+
+In C thus it is a possible choice to define the types Var as well as Lit as the basic type int (do not use unsigned int, since in this way you get into unnecessary trouble with negation). It is an easy implementation, however not type-safe.
+
+To associate information with variables and literals, the most natural way for this representation is to use variables and literals as \textit{indices}.
+
+
+\section{Clauses}%p12
+
+Let $\pmcl(\pmva)$ be the set of finite subsets $C\subseteq \mlit(\mva)$ without \textit{clashing literals}, that is
+\[
+\neg \exists x\in C : \overline{x} \in C.
+\]
+
+The elements of $\mcl(\mva)$ are called \textbf{clauses} (over $\mva$).
+
+A special clause is the \textbf{empty clause}
+\[
+\bot := \emptyset \in \mcl(\mva).
+\]
+
+For clauses $C\in \mcl(\mva)$ we define
+\begin{align*}
+\overline{{\bm C}} & \q :=  \q \left\{\overline{x} : x\in C\right\} \\
+\bvar (C) & \q :=  \q \left\{\var (x) : x\in C\right\}
+\end{align*}
+We have $\overline{C} \in \mcl(\mva)$, while $\var(C)$ is a finite subset of $\mva$.
+
+\section{Remarks on implementations of clauses}%p13
+
+Since a clause is a \textit{set}, we have the following properties of clauses:
+\begin{enumerate}
+\item every element occurs only once in a clause;
+\item there is no order on the elements of a clause.
+\end{enumerate}
+Condition 1 is easily enforcable, and thus SAT solvers always implement this condition.
+
+Condition 2 on the other hand is typically not implemented by solvers, and the order on the elements of a clause (for example given by the input order) may be exploited for the sake of efficiency. However, the ``essential'' behaviour of most solvers is not dependent on this order (it is only used for internal purposes).
+
+The (defining) condition $C\cap \overline{C} = \emptyset$ for clauses $C$ again is easily enforcable, and thus often implemented.
+
+The natural implementation of a clause is as a list of its literals.
+
+
+\section{Clause-sets}%p14
+
+For a set $F\subseteq \mcl(\mva)$ of clauses let
+\[
+\bvar({\bm F}) := \bigcup\limits_{C\in F} \var(C).
+\]
+
+Let $\pmcls(\pmva)$ be the set of subsets $F\subseteq \mcl(\mva)$ with \textit{finite} $\var(F)$. The elements of $\mcls(\mva)$ are called \textbf{clause-sets} (over $\mva$).
+
+(In case one does not want the finiteness of $\var(F)$ one simply speaks of \textit{sets of clauses}.)
+
+In fact $F$ is finite if and only if $\var(F)$ is finite (this does not hold in general for \textit{generalised clause-sets}).
+
+A special clause-set is the empty clause-set
+\[
+\top := \emptyset \in \mcls(\mva).
+\]
+
+
+\section{Examples}%p15
+
+The conjunctive normal form
+\[
+(a) \wedge (\neg a \vee \neg b \vee c) \wedge (b \vee \neg d)
+\]
+corresponds to the clause-set (using variables $a, b, c, d$)
+\[
+F = \left\{ \; \{(a,0)\}, \{(a,1), (b,1), (c,0)\},\{(b,0), (d,1)\} \; \right\}.
+\]
+Using the identification of variables $v$ with positive literals $(v,0)$, this is the same as
+\[
+F = \left\{ \; \{a\}, \{\overline{a}, \overline{b}, c\}, \{b, \overline{d}\} \; \right\}.
+\]
+Obviously $\var(F) = \{a, b, c, d\}$.
+
+The set of literals $\{a, \overline{a}\}$ is not a clause, since by definition no clause contains clashing literals.
+
+\section{Implementing clause-sets}%p16
+
+Since a clause-set $F$ is a \textit{set}, we (again) have the following two properties:
+\begin{enumerate}
+\item No clause may occur more than once in a clause-set.
+\item There is no order on the elements of a clause-set.
+\end{enumerate}
+Since both conditions are expensive to maintain, most solvers do not implement them, that is
+\begin{enumerate}
+\item clauses may occur several times  (even if we check that this is not the case for the input, multiple occurrences of clauses may occur in the course of the computation);
+\item the running time of the solver may (in some cases even heavily) depend on the order of the input clauses.
+\end{enumerate}
+
+
+\section{Partial assignments}%p8
+
+Let $\pmpv$ be the set of all maps
+\[
+\varphi : V \to \{ 0, 1 \}
+\]
+for \textit{finite} subsets $V\subseteq \mva$. The elements of $\mpv$ are callec \textbf{partial assignments} (over $\mva$).
+
+For $\varphi \in \mpass$ let $\bvar(\pmb{\varphi})$ be the domain of $\varphi$.
+
+A special partial assignment is the empty \textbf{partial assignment} $\emptyset \in \mpass$.
+
+For two partial assignments $\varphi,\psi \in \mpv$ we define their \textbf{composition} by
+\begin{align*}
+& \pmb{\varphi \circ \psi} := \\
+ (
+& v\mapsto
+\begin{cases}
+\psi(v) \q v \in \var(\psi). \\
+\varphi(v) \q v \in \var(\varphi) \; \backslash \; \var(\psi)
+\end{cases}
+)_{v\in \var(\varphi) \cup \var(\psi)}.
+\end{align*}
+In other words: For the composition of two partial assignments take their ``union'' for non-conflicting variables, while in case of a conflict the right assignments ``wins''.
+
+The composition of two partial assignments is again a partial assignment:
+\begin{align*}
+\varphi \circ \psi & \in \mpv \\
+\var(\varphi \circ \psi) & = \var(\varphi)\cup \var(\psi).
+\end{align*}
+The basic laws for composition of partial assignments are (considering $\varphi, \psi, \vartheta \in \mpass$):
+\[
+\varphi \circ \emptyset  = \emptyset \circ \varphi = \varphi
+\]
+\[
+\varphi \circ (\psi \circ \vartheta) = (\varphi \circ \psi) \circ \vartheta .
+\]
+Thus the empty partial assignment is the \textbf{identity element}, and the composition of partial assignments is \textbf{associative}. Furthermore we have
+\begin{align*}
+\varphi \circ \psi = \psi \circ \varphi & \;\; \Longleftrightarrow \\
+& \, \forall v\in \var(\varphi) \cap \var(\psi) : \varphi(v) = \psi(v).
+\end{align*}
+In words: Two partial assignments commute (w.r.t. composition), if and only if they are \textit{compatible}.
+
+\section{Elementary partial assignments}
+
+For variables $v_1, \ldots, v_n \in \mva, \; n\in \mathbb{N}_0$ with $v_i \neq v_j$ for $i\neq j$, and truth values $\varepsilon_1, \ldots, \varepsilon_n \in \{0,1\}$ we write
+\[
+\pmb{\langle v_1 \to \varepsilon_1, \ldots, v_n \to \varepsilon_n\rangle}
+\]
+for the partial assignment with
+\[
+\mbox{domain} \; \{v_1, \ldots, v_n\}
+\]
+which maps $v_i \mapsto \varepsilon_i$.
+
+The ``monoid'' $(\mpv, \circ)$ (an associative groupoid with identity element) is generated by the \textit{elementary partial assignments} $\langle v\to \varepsilon\rangle$ for $v\in \mva$ and $\varepsilon \in \{0,1\}$, and the ``defining relations'' are
+\[
+\langle v\to \varepsilon \rangle \circ \langle v\to \varepsilon' \rangle = \langle v\to \varepsilon' \rangle \\
+\]
+\[
+\langle v\to \varepsilon \rangle \circ \langle w\to \varepsilon' \rangle = \langle w\to \varepsilon' \rangle \circ \langle v\to \varepsilon \rangle\\
+\]
+for $v, w\in \mva, v\neq w$, and $\varepsilon, \varepsilon' \in \{0, 1\}$.
+
+%p11
+\section{Examples}
+
+consider variables $a,b,c,d \in \mva$. By the term $\langle a\to 0, b\to 1 \rangle$ the partial assignment $\varphi$ with domain $\var(\varphi) = \{a, b\}$ and $\varphi(a) = 0$ and $\varphi(b) = 1$ is denoted.
+
+Examples for the defining relations are
+\begin{align*}
+\langle a\to 0 \rangle \circ \langle a\to 1 \rangle & = \langle a\to 1 \rangle \\
+\langle b\to 1 \rangle \circ \langle b\to 1 \rangle & = \langle b\to 1 \rangle \\
+\langle c\to 1 \rangle \circ \langle c\to 0 \rangle & = \langle c\to 0 \rangle
+\end{align*}
+and
+\begin{align*}
+& \langle a\to 0 \rangle \circ \langle d\to 1 \rangle = \langle d\to 1 \rangle \circ \langle a\to 0 \rangle \\
+& \langle b\to 1 \rangle \circ \langle c\to 1 \rangle = \langle c\to 1 \rangle \circ \langle b\to 1 \rangle
+\end{align*}
+Every partial assignments is a composition of elementary partial assignments, for example
+\[
+\langle a\to 0, b\to 1, c\to 0 \rangle = \langle a\to 0 \rangle \circ \langle b\to 1 \rangle \circ \langle c\to 0 \rangle. \\
+\]
+An example for a composition of two non-elementary partial assignments:
+\begin{align*}
+\langle a\to 0, b\to 1, c\to 0 \rangle & \circ \langle a\to 1, b\to 1, d\to 0 \rangle = \\
+& \langle a\to 1, b\to 1, c\to 0, d\to 0 \rangle.
+\end{align*}
+
+%p12
+\section{Extending partial assignments from variables to literals}
+
+Consider $\varphi \in \mpass$. Now for $v\in \var(\varphi)$ the term $\varphi(v)$ is defined, while we set
+\[
+\varphi(\overline{v}):= 1- \varphi(v).
+\]
+Thus $\varphi(x)$ is defined for literals $x$ if and only if we have $x\in \mlit (\var(\varphi))$.
+
+Using the representation $x = (v, \varepsilon)$ of literals as pairs we have
+\[
+\varphi(x) = \varphi((v,\varepsilon)) = \varphi(v) \oplus \varepsilon,
+\]
+where here we interprete truth values as elements of $\mathbb{Z}_2 = \{0, 1\}$, and where $\oplus$ is addition in $\mathbb{Z}_2$ (i.e., XOR):
+\begin{align*}
+0 \oplus 0 & = 1 \oplus 1 = 0 \\
+0 \oplus 1 & = 1 \oplus 0 = 1.
+\end{align*}
+
+%p13
+\section{Generalising the constructor for partial assignments}
+
+Given literals $x_1, \ldots, x_n, \; n\in \mathbb{N}_0$ and $\varepsilon\in \{0,1\}$ for $i = 1, \ldots, n$, such that we have $\var(x_i)\neq \var(x_j)$ for $i\neq j$, there is exactly one partial assignment $\varphi$ with domain $\var(\varphi) = \{\var(x_1), \ldots, \var(x_n)\}$ and
+$\varphi(x_i) = \varepsilon_i$ for $i = 1, \ldots, n$. Thus we can define
+\[
+\pmb{\langle x_1 \to \varepsilon_1, \ldots, x_n \to \varepsilon_n \rangle}
+\]
+as the unique partial assignment $\varphi$ as given above. This definition extends the definition given before, which corresponds to the special case of the extended definition where all literals $x_i$ are positive. For example
+\begin{align*}
+\langle a, b\to 0 \rangle & = \langle a\to 0, \overline{b}\to 1 \rangle = \\
+& \langle \overline{a}\to 1, b\to 0 \rangle = \langle \overline{a}, \overline{b}\to 1 \rangle.
+\end{align*}
+The same example as before for composition of partial assignments, only this time using literals:
+\begin{align*}
+\langle a\to 0, \overline{b}\to 0, c\to 0 \rangle & \circ \langle \overline{a}\to 0, b\to 1, d\to 0 \rangle = \\
+& \langle a\to 1, b\to 1, c\to 0, \overline{d}\to 1 \rangle.
+\end{align*}
+
+%\textbf{\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&\&}
+%
+%\textbf{\textit{week 2b 7 8 9}}
+
+%p7
+
+\section{The operation of partial assignments on clause-sets}
+
+For $\varphi \in \mpass$ and $F\in \mcls$ we define
+\[
+\pmb{\varphi * F} := \{C \;\backslash\; C_\varphi : C\in F \wedge C\cap \overline{C_\varphi} = \emptyset\}.
+\]
+In words: Apply $\varphi$ to $F$ by eliminating all clauses containing a literal set to true, and remove all literals set to false from the remaining clauses.
+
+We define the following relations for $\varphi \in \mpass$ and $C \in \mcl, \; F\in \mcls$:
+\begin{align*}
+\varphi(F) & = 1 \q \Leftrightarrow \q \varphi * F = \top, \\
+\varphi(F) & = 0 \q \Leftrightarrow \q \bot \in \varphi * F, \\
+\varphi(C) & = 1 \q \Leftrightarrow \q \varphi(\{C\}) = 1 \\
+\varphi(C) & = 0 \q \Leftrightarrow \q \varphi(\{C\}) = 0.
+\end{align*}
+Thus we have
+\begin{align*}
+\varphi(F) & = 1 \q \Longleftrightarrow \q \forall \; C\in F : \varphi(C) = 1 \\
+\varphi(F) & = 0 \q \Longleftrightarrow \q \exists \; C\in F : \varphi(C) = 0.
+\end{align*}
+
+%p8
+
+\section{Examples}
+
+\[
+\varphi_{\{a,\overline{b},c\}} = \langle a, \overline{b}, c\to 0\rangle = \langle a\to 0, b\to 1, c\to 0 \rangle \\
+\]
+\[
+C_{\langle x\to 0, y\to 1, z\to 0 \rangle} = \{x, \overline{y}, z\}
+\]
+\begin{align*}
+\langle a\to 1 \rangle * \left\{\{a,b,c\}, \{\overline{a}, \overline{c}\}, \{\overline{b}, \overline{c}\} \right\} = & \\
+& \left\{\{\overline{c}\}, \{\overline{b}, c\} \right\}
+\end{align*}
+\begin{align*}
+\langle a\to & 0, b\to 1, c\to 0 \rangle * \\
+& \left\{\{a,b,x\}, \{a,\overline{b},c\}, \{\overline{x}, \overline{y}\}, \{a,c,x\} \right\} = \\
+& \qquad \qquad \;\; \left\{\bot, \{\overline{x}, \overline{y}\}, \{x\}\right\}
+\end{align*}
+(a falsifying assignment)
+\begin{align*}
+\langle x\to & 1, y\to 0, z\to 1 \rangle * \\
+& \left\{\{x,y,\overline{z}\}, \{x,\overline{y},z\}, \{\overline{x}, \overline{y}\}, \{x,y\} \right\} = \top
+\end{align*}
+(a satisfying assignment)
+
+%p9
+\section{Satisfiability and unsatisfiability}
+
+We define
+\begin{align*}
+\pmb{\msat(\mva)} := \{ F & \in \mcls(\mva)| \\
+& \; \exists \; \varphi \in \mpass(\mva) : \varphi(F) = 1 \}
+\end{align*}
+\begin{align*}
+& \pmb{\musat(\mva)} := \mcls(\mva) \;\backslash\; \msat(\mva) = \\
+& \;\; \{F\in \mcls(\mva) \mid \forall\; \varphi \in \mpass(\mva) : \varphi(F) \neq 1\}.
+\end{align*}
+
+The elements of $\msat$ are called
+\[
+\mbox{\textbf{satisfiable clause-sets,}}
+\]
+while the elements of $\musat$ are called
+\[
+\mbox{\textbf{unsatisfiable clause-sets.}}
+\]
+A partial assignment $\varphi \in \mpass$ with $\varphi(F) = 1$ is called a \textbf{satisfying assignment} or a \textbf{model} for $F$.
+
+
+\end{document}
