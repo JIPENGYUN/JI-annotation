@@ -1,0 +1,102 @@
+% Ji Pengyun, 20.10.2014 (Swansea)
+
+\documentclass{report}
+
+\input Latex_macros/Definitionen.tex
+
+\usepackage{a4}
+\usepackage[all]{xy}
+\usepackage{enumerate}
+\usepackage{xr}
+
+
+\begin{document}
+
+\title{XXX}
+\author{Ji Pengyun\\
+  \href{http://www.swan.ac.uk/compsci/}{Computer Science Department}, \href{http://www.swan.ac.uk/science/}{College of Science}\\
+   \href{http://www.swan.ac.uk/}{Swansea University, UK}\\
+  {\small \url{http://www.swan.ac.uk/NOT_YET}}
+}
+
+
+
+\maketitle
+
+\tableofcontents
+
+\chapter{General preparations}
+\label{cha:Generalpreparations}
+
+
+\section{First talk at MRes seminar}
+\label{sec:FirsttalkMRes}
+
+\begin{defi}\label{def:cartesianprod}
+  Suppose $A$ and $B$ are sets. Then the \textbf{product} of $A$ and $B$, denoted by $A \times B$, is the set of all ordered pairs in which the first component is an element of $A$ and the second is an element of $B$. In other words,
+  \begin{displaymath}
+    A \times B := \set{ (a,b) \mb a \in A \text{ and }  b \in B}.
+  \end{displaymath}
+\end{defi}
+
+\begin{thm}\label{thm:propprod}
+  Consider sets $A, B, C, D$.
+  \begin{enumerate}
+  \item\label{thm:propprod5} $A \times \es = \es \times A = \es$.
+  \item\label{thm:propprod1} $A \times (B \cap C) = (A\times B) \cap (A \times C)$.
+  \item\label{thm:propprod2} $A \times (B \cup C) = (A \times B) \cup (A \times C)$.
+  \item\label{thm:propprod3} $(A \times B) \cap (C \times D) = (A \cap C) \times (B \cap D)$.
+  \item\label{thm:propprod4} $(A \times B) \cup (C \times D) \sse (A \cup C) \times (B \cup D)$.
+  \end{enumerate}
+\end{thm}
+\begin{prf}
+Part \ref{thm:propprod4}:  $(A \times B) \cup (C \times D) \sse (A \cup C) \times (B \cup D)$.\\
+First introduce arbitrary objects $x$, $y$ that turn out to be an ordered pair, say $(x, y)$.\\
+Let $(x,y)$ be an arbitrary element of $(A \times B) \cup (C \times D)$.\\
+Then either $(x,y) \in (A \times B)$ or $(x,y) \in (C \times D)$.\\
+\newline
+Case 1. $(x,y) \in (A \times B)$. Then by definition $x \in A$ and $y \in B$.\\
+Apparently $x \in (A \cup C)$ and $y \in (B \cup D)$.\\
+Therefore, $(x,y) \in (A \cup C) \times (B \cup D)$.\\
+\newline
+Case 2. $(x,y) \in (C \times D)$. That's the similar argument shows that $x \in (A \cup C)$ and $y \in (B \cup D)$.\\
+Therefore, $(x,y) \in (A \cup C) \times (B \cup D)$.\\
+\newline
+As $(x,y)$ was an arbitrary element of $(A \times B) \cup (C \times D)$, this follows that $(A \times B) \cup (C \times D) \sse (A \cup C) \times (B \cup D)$.
+
+\Qed
+\end{prf}
+\\
+Remarks:\\
+For Part \ref{thm:propprod4} the reverse direction does not hold $(A \cup C) \times (B \cup D) \sse (A \times B) \cup (C \times D)$.\\
+
+\begin{prf}
+Consider $(x,y)$ be an arbitrary element of $(A \cup C) \times (B \cup D)$. Then $(x,y) \in (A \cup C) \times (B \cup D)$.\\
+By definition\ref{def:cartesianprod} that $x \in (A \cup C)$ and $y \in (B \cup D)$,\\
+either $x \in A$ or $C$ and either $y \in B$ or $D$.\\
+
+Case 1. $x \in A$ and $y \in B$, then $(x,y) \in (A \times B)$.\\
+So $(x,y) \in (A \times B) \cup (C \times D)$.\\
+Since $(x,y) \in (A \cup C) \times (B \cup D)$.\\
+Therefore, $(A \cup C) \times (B \cup D) \sse (A \times B) \cup (C \times D)$ hold in first case.\\
+
+Case 2. $x \in C$ and $y \in D$, then $(x,y) \in (C \times D)$.\\
+Here follow by basically similar arguments with case 1.\\
+Therefore, $(A \cup C) \times (B \cup D) \sse (A \times B) \cup (C \times D)$ hold in second case.\\
+
+Case 3. $x \in A$ and $y \in D$, then $(x,y) \in (A \times D)$.\\
+However $A \times D$ is not a subset of $(A \times B) \cup (C \times D)$,\\
+Since $(x,y) \in (A \cup C) \times (B \cup D)$,\\
+Therefore $(A \cup C) \times (B \cup D) \varsubsetneq (A \times B) \cup (C \times D)$.\\
+\newline
+A contradiction proof is given.
+
+\Qed
+\end{prf}
+
+
+
+
+
+
+\end{document}
