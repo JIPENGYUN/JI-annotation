@@ -1,0 +1,504 @@
+\documentclass[12pt]{article} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{array}
+\usepackage{indentfirst}
+\usepackage[nospace,nocompress]{cite}
+\usepackage{multirow}
+\usepackage{mathrsfs}
+\usepackage{amsbsy}
+\linespread{1}
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1.5ex plus0.5ex minus0.5ex}
+\newtheorem{defn}{Definition}%[section]
+\newtheorem*{lem}{Lemma}%[section]
+\newtheorem*{pf}{Proof}
+\newtheorem{col}{Corollary}%[section]
+\newtheorem{pro}{Proposition}%[section]
+\newtheorem{thm}{Theorem}%[section]
+\bibliographystyle{alphadin}
+\def\p{{\rm p}}
+\def\E{{\rm E}}
+\def\P{{\rm P}}
+
+
+\begin{document}
+
+
+First regard to the Example 7.2.1. of handbook chapter
+\subsubsection*{A formula for the Fibonacci numbers}
+ a formula for values of the Fibonacci function:
+\begin{equation}
+f(n) =
+\frac1{\sqrt{5}}\left[\left(\frac{1 +\sqrt{5}}2\right)^n-\left(\frac{1 -\sqrt{5}}2\right)^n\right].
+\end{equation}
+
+For now, we can appreciate the power of Binet's Formula by using it to
+estimate size of the 1000$^{\rm th}$ Fibonacci number. Since
+\[
+\frac{1 +\sqrt{5}}2\approx 1.618 \text{ and }\frac{1 -\sqrt{5}}2\approx -.618.
+\]
+and (.618)$^{1000}$ is very small, then
+\[
+f(1000) \approx\frac1{\sqrt{5}}(1.618)^{1000} .
+\]
+If we're interested in estimating the size of $f(1000)$ in terms of the number
+of its decimal digits, we can use the base-10 logarithm. Since
+\[
+1000\cdot \log(1.618) - .5\log(5) \approx 208.629,
+\]
+
+we expect the number of decimal digits in $f(1000)$ to be about 209. In fact,
+the 1000$^{\rm th}$ Fibonacci number is the number
+\begin{align*}
+f(1000) =~&43466557686937456435688527675040625802564660517371\\
+&78040248172908953655541794905189040387984007925516\\
+&92959225930803226347752096896232398733224711616429\\
+&96440906533187938298969649928516003704476137795166\\
+&849228875,
+\end{align*}
+which does have the predicted 209 digits.
+
+With $\lambda_0 =\frac{1+ \sqrt{5}}2$, $\lambda_1 =\frac{1- \sqrt{5}}2$, and $\alpha = 1/ \sqrt{5}$, Binet's Formula can be rewritten as
+\[f(n) = \alpha (\lambda^n_0- \lambda^n_1 ).
+\]
+Since $ |\lambda_1 | < 1$ and $\alpha < 1/2$, then $|f_n - \alpha \lambda^n_0 | = \alpha |\lambda_1 |^n < 1/2$, and the fact that $f_n$ is an integer therefore gives the pleasant identity
+\begin{align}
+f_n = {\rm Round}\left(\lambda^n_0 /\sqrt{5} \right) \text{ for all } n \geq 0,
+\end{align}
+where Round$(X)$ returns the integer nearest to $X$.
+
+\subsection*{Notation for Asymptotic Analysis}
+
+There are often many algorithms for the same problem. For instance, in
+the case of computing Fibonacci numbers we've already written two types
+of algorithms for computing a specific Fibonacci number, either using the
+definition directly or using Binet's Formula. Our usual method of assessing the efficiency of various algorithms for a problem will be to compare
+their run times, and usually this is done with an asymptotic analysis. For
+this there are three standard forms of notation, {\bf Big-Oh}, {\bf Big-Omega},
+and {\bf Big-Theta}. Each notation removes unimportant details so we can see
+the size of run time more clearly. 
+Although our principal use of this notation is for positive real numbers, our
+definitions allow $T(n)$ to be a {\it complex-valued} sequence.
+
+Let $T(n)$ and $f(n)$ be two complex-valued sequences. Then
+
+$T(n) = O(f(n))$ (we say $T(n)$ has order at most $f(n)$) means that there
+exists a positive constant $c$ such that
+
+$|T(n)| \leq c|f(n)|$ for all sufficiently large $n$.
+
+$T(n) = \Omega (f(n))$ (we say $T(n)$ has order at least $f(n)$) means that there
+exists a positive constant $c$ such that
+
+$|T(n)| \geq c|f(n)|$ for all sufficiently large $n$.
+
+$T(n) = \Theta (f(n))$ (we say $T(n)$ has order exactly $f(n)$) means that there
+exist positive constants $c_1 ,c_2$ such that
+
+$c_1 |f(n)| \leq |T(n)| \leq c_2 |f(n)|$ for all sufficiently large $n$.
+
+For instance, from (2) we know that the asymptotic size of $f_n$ is $\Theta (\lambda^n_0 )$
+where $\lambda_0 = (1+ \sqrt{5})/2$. To get some practice with this notation, you should
+verify that for any fixed pair of positive integers $i \leq j$, each of the following
+holds:
+\[
+n^i = O(n^j ), ~~n^j = \Omega (n^i ), \quad\Theta (n^i ) = \Theta (n^j ) \text{ implies } i = j .
+\]
+
+
+The Definitions of handbook chapter.
+
+{\bf Definition 7.3.1.} $\mathcal{BT} :=\bigcup_{k\in \mathbb{N}}(\mathbb{R}_{>0})^k$
+denotes the set of {\bf branching tuples}.
+
+Remarks:
+
+\begin{enumerate}
+\item  Basic measurements for branching tuples are minimum $\min: \mathcal{BT} \to \mathbb{R}_{>0}$,
+maximum $\max : \mathcal{BT} \to \mathbb{R}_{>0}$, sum $\Sigma : \mathcal{BT} \to \mathbb{R}_{>0}$, and width $|| : \mathcal{BT} \to \mathbb{N}$.
+The minimum $\min(a)$ of a branching tuple is a ``worst-case view'', while
+max($a$) is a ``best-case view''. In general, disregarding the values, the
+larger $|a|$, i.e., the wider the branching is, the worse it is.
+
+\item The set of branching tuples of width $k$ is $\pmb{\mathcal{BT}}^{\bm{(k)}}:= \{t \in \mathcal{BT} : |t| = k\}$,
+which is a {\it cone}, that is for $a \in \mathcal{BT}^{(k)}$ and $\lambda \in \mathbb{R}_{>0}$ we have $\lambda \cdot t \in \mathcal{BT}^{(k)} $, and for $a,b \in \mathcal{BT}^{(k)}$ we have $a + b \in \mathcal{BT}^{(k)}$.
+
+\item Branching tuples of width 1, which do not represent ``real branchings'' but
+``reductions'', are convenient to allow.
+
+\item One could also allow the empty branching tuple as well as the zero branching tuple (0) (of width 1), but for the sake of simplicity we abstain from
+such systematic extensions here.
+\end{enumerate}
+
+
+{\bf Definition 7.3.2.} Define $\chi _k : \mathcal{BT} \times \mathbb{R}_{>0} \to \mathbb{R}_{>0}$ by $\chi (t,x) :=
+\sum^{|t|}_{i=1} x^{-t_i}$. Observe
+that for each $t \in \mathcal{BT}$ the map $\chi (t,-) : \mathbb{R}_{>0} \to \mathbb{R}_{>0}$ is strictly decreasing with
+$\chi (t,1) = |t| \geq 1$ and $\lim _{x\to \infty} \chi (t,x) = 0$. Now $\tau : \mathcal{BT} \to \mathbb{R}_{\geq 1} $ is defined as the
+unique $\tau (t) := x_0 \in\mathbb{R}_{\geq 1} $ such that $\chi (t)(x_0 ) = 1$ holds.
+
+By definition we have $\tau (t) \geq 1$, with $\tau (t) = 1 \Leftrightarrow |t| = 1$. For $k \in \mathbb{N} $ we denote
+by $\tau_k : \mathcal{BT}^{(k)}
+\to \mathbb{R}_{\geq 1} $ the $\tau $-function restricted to branching tuples of width $k$.
+
+
+{\bf Lemma 7.3.1.} For every $a \in \mathcal{BT} , k \in \mathbb{N}$ and $\lambda \in \mathbb{R}_{>0}$ we have:
+
+\begin{enumerate}
+\item[1.]$\tau (\lambda \cdot a) = \tau (a)^{1/\lambda} $.
+
+\item[2.] $\tau_k (\vec{1}) = k$.
+
+\item[3.] $\tau_k$ for $k \geq 2$ is strictly decreasing in each component.
+
+\item[4.] $\tau_k$ is symmetric, that is, invariant under permutation of branching tuples.
+
+\item[5.] $\tau (a)^{\min(a)} \leq |a| \leq \tau (a)^{\max(a)}$, that is, $|a|^{1/\max(a)} \leq \tau (a) \leq |a|^{1/\min(a)}$.
+
+\item[6.] $\lim_{\lambda \to 0} \tau (a;(\lambda )) = \infty$ and $\lim _{\lambda \to \infty }\tau (a;(\lambda )) = \tau (a)$.
+\end{enumerate}
+
+The $\tau $-function fulfils powerful convexity properties, from which non-trivial
+further properties will follow. A function $f : C \to \mathbb{R}$ defined on some convex
+subset $C \subseteq \mathbb{R}^k$ is called ``strictly convex'' if for all $x,y \in C$ and $0 < \lambda < 1 $ holds
+$f(\lambda x+(1-\lambda )y) < \lambda f(x)+(1-\lambda )f(y)$; furthermore $f$ is called ``strictly concave''
+if $-f$ is strictly convex. By definition $\tau_1$ is just the constant function with value
+1, and so doesn't need to be considered here.
+
+{\bf Lemma 7.3.2.} For $k \geq 2$ the function $\tau_k$ is strictly convex.
+
+
+\subsubsection*{7.3.3~~Bounds on the tau-function}
+
+Just from being symmetric and strictly convex it follows, that $\tau_k (a)$ for tuples a
+with a given fixed sum $\Sigma (a) = s$ attains its strict minimum for the constant tuple
+(with entries $\frac sk $); Thus, using $\mathfrak{A}(t) :=
+ \sum(t)/|t|$ for the arithmetic mean of a branching tuple, we have $\tau (\mathfrak{A}(t) \cdot \vec{1}) \leq \tau (t)$ (with
+strict inequality iff $t$ is not constant).
+
+\begin{enumerate}
+\item The {\it arithmetic mean}, the {\it geometric mean}, and the {\it harmonic mean} of
+branching tuples $t$ are denoted respectively by $\mathfrak{A}(t) :=\frac1{|t|} \Sigma (t) =
+\frac1{|t|}\sum^{|t|}_{i=1} t_i$,
+$\mathfrak{G}(t) :=\sqrt[|t|]{\prod^n_{i=1} t_ i}$
+and $\mathfrak{H}(t) := |t|/(\sum^n_{i=1}\frac1{t_i})$. We recall the well-known
+fundamental inequality between these means: $\mathfrak{H}(t) \leq \mathfrak{G}(t) \leq \mathfrak{A}(t)$ (where
+strict inequalities hold iff $t$ is not constant).
+
+\item More generally we have the {\it power means} for $\alpha \in \overline{\mathbb{R}}$ given by $\mathfrak{M} _\alpha (t) :=(\frac1{|t|}\sum^{|t|}_{i=1} t^\alpha_i)^{1/\alpha}$
+for $\alpha \notin \{-\infty ,0,+\infty \}$, while we set $\mathfrak{M} _{-\infty} (t) := \min(t)$,
+$\mathfrak{M}_ 0 (t) := \mathfrak{G}(t)$ and $\mathfrak{M} _{+\infty} (t) := \max(t)$. By definition we have $\mathfrak{M}_{{-1}} (t) =
+\mathfrak{H}(t)$ and $\mathfrak{M}_ 1 (t) = \mathfrak{A}(t)$. In generalisation of the above fundamental inequality we have for $\alpha $, $\alpha ' \in \overline{\mathbb{R}}$ with $\alpha < \alpha '$ the inequality $\mathfrak{M} _\alpha (t) \leq \mathfrak{M} _{\alpha ' } (t)$,
+which is strict iff $t$ is not constant.
+\end{enumerate}
+
+We want to establish a variation of the $\tau $-function as a ``mean'', comparable to
+the above means. In the literature there are no standard axiomatic notions about
+``means'', only collections of relevant properties, and we condense the relevant
+notion here as follows:
+
+{\bf Definition 7.3.3.} Consider $k \in \mathbb{N}$. A {\bf mean} is a map $M : \mathcal{BT}^{(k)}
+\to\mathbb{R}_{ >0}$
+which is continuous, strictly monotonic increasing in each coordinate, symmetric
+(i.e., invariant under permutation of the arguments) and ``consistent'', that is,
+$\min(a) \leq M(a) \leq \max(a)$ for $a \in \mathcal{BT}^{(k)}$. A mean $M$ is {\bf homogeneous} if $M $ is
+positive homogeneous, i.e., for $\lambda \in \mathbb{R}_{ >0}$ and $a \in \mathcal{BT}^{(k)}$
+we have $M(\lambda \cdot a) = \lambda \cdot M(a)$.
+
+All power means are homogeneous means. Yet $k$-ary means $M$ are only
+defined for tuples of positive real numbers $a \in \mathbb{R}_{ >0}^ k
+$, and we extend this as follows
+to allow arguments 0 or $+\infty $, using the extended real line $\overline{\mathbb{R}} = {\mathbb{R}} \cup \{\pm \infty \}$. We
+say that $M$ is defined for $a \in \overline{\mathbb{R}}_{ \leq0}^ k$
+(allowing positions to be 0 or $+\infty $) if the
+limit $\lim _{a ' \to a,a' \in \mathbb{R}_{>0}^k} M(a')$ exists in $\overline{\mathbb{R}}$, and we denote this limit by $M(a)$ (if the
+limit exists, then it is unique). Power means $ \mathfrak{M} _\lambda (a)$ for $\lambda \neq0$ are defined for all
+$a \in \overline{\mathbb{R}}_{ \leq0}^ k$, while $\mathfrak{M}_ 0 (a) = \mathfrak{G}(a)$ is defined iff there are no indices $i,j $ with $a_i= 0$
+and $a _j = \infty $.
+
+{\bf Definition 7.3.4.} Consider a mean $M : \mathcal{BT}^{(k)}
+\to {\mathbb{R}}_{>0}$. We say that $M$ is $\infty ${\bf -dominated} resp. 0{\bf -dominated} if for every $a \in \overline{\mathbb{R}}_{ \geq0}^ k$, such that an index $i$ with
+$a _i = \infty$ resp. $a_ i = 0$ exists, $M(a)$ is defined with $M(a) = \infty$ resp. $M(a) = 0$. On
+the other hand, $M$ {\bf ignores} $\infty$ resp. {\bf ignores} 0 if $M(a;(\infty ))$ resp. $M(a;(0))$ is
+defined iff $M(a)$ is defined with $M(a;(\infty )) = M(a)$ resp. $M(a;(0)) = M(a)$.
+
+
+Power means $\mathfrak{M} _\lambda$ with $\lambda > 0$ are $\infty $-dominated and ignore 0, while for $\lambda < 0$
+they are 0-dominated and ignore $\infty $. The borderline case $\mathfrak{M}_ 0 = \mathfrak{G}$ is $\infty $-dominated
+as well as 0-dominated if only tuples are considered for which $\mathfrak{G}$ is defined (and
+thus we do not have to evaluate ``$0 \cdot \infty $'').
+
+Another important properties of means is convexity resp. concavity. Power
+means $\mathfrak{M }_\alpha$ with $\alpha > 1$ are strictly convex, while power means $\mathfrak{M}_\alpha$ with $\alpha < 1$ are
+strictly concave; the borderline case $\mathfrak{M}_1 = \mathfrak{A}$ is linear (convex and concave).
+
+{\bf Lemma 7.3.3.} For every concave mean $M$ we have $\mathfrak{M} \leq \mathfrak{A}$.
+
+{\it Proof.} By Jensen's inequality we have $M(a) =\sum_{\pi \in S_k}\frac1{k!} M(\pi * a) \leq
+M( \sum_{\pi \in S_k}\frac1{k!}\cdot (\pi * a)) = M(\mathfrak{A}(a) \cdot \vec{1}) = \mathfrak{A}(a)$. \hfill  $\Box$
+
+
+
+{\bf Jensen's Inequality}
+
+If $p_1,\ldots,p_n$ are positive numbers which sum to 1 and $f$ is a real
+continuous function that is convex, then
+\begin{equation}
+f\left(\sum^n_{i=1}p_ix_i\right) \leq \sum^{n}_{i=1}p_if(x_i).
+\end{equation}
+
+If $f$ is concave, then the inequality reverses, giving
+\begin{equation}
+f\left(\sum^n_{i=1}p_ix_i\right) \geq \sum^{n}_{i=1}p_if(x_i).
+\end{equation}
+
+The special case of equal $p_i=1/n$ with the concave function $\ln x$ gives
+\begin{equation}
+\ln\left(\frac1n\sum^n_{i=1}x_i\right) \geq \frac1n\sum^{n}_{i=1}\ln x_i,
+\end{equation}
+
+
+which can be exponentiated to give the arithmetic mean-geometric mean inequality
+\begin{equation}
+\frac{x_1+x_2+\ldots + x_n}{n}\geq \sqrt[n]{x_1x_2\cdots x_n}.
+\end{equation}
+
+Here, equality holds iff $x_1=x_2=\ldots = x_n$.
+
+
+
+
+\subsubsection*{7.3.4~~Associating probability distributions with branching tuples}
+
+{\bf Definition 7.3.6.} Given a branching tuple $a = (a_1 ,\ldots,a_k )$, the branching tuple
+$\tau^\p (a) \in \mathcal{BT}^{(k)}$ is defined by $\tau^\p (a) _i := \tau (a) ^{-a_i}$ for $i \in \{1,\ldots,k\}$.
+
+Remarks:
+
+\begin{enumerate}
+ \item By definition we have $\Sigma (\tau^\p (a)) = 1$, and thus $\tau^\p (a)$ represents a probability distribution (on $\{1,\ldots,k\}$).
+
+ \item  For $\lambda \in {\mathbb{R}}_{>0}$ we have $\tau^\p (\lambda \cdot a) = \tau^\p (a)$, and thus $\tau^\p (a) $ only depends on
+the relative sizes of the entries $a_ i$, and not on their absolute sizes.
+
+ \item  For fixed $k$ we have the map $\tau^p_k: \mathcal{BT}^{(k)}\to {\rm int}(\sigma_{k-1} ) \subset \mathcal{BT}^{(k)}$
+from the set
+of branching tuples $(a_1 ,\ldots,a_k )$ of length $k$ to the interior of the $(k - 1)$-dimensional standard simplex $\sigma_{k-1}$, that is, to the set of all branching
+tuples $(p_1 ,\ldots,p_k ) \in \mathcal{BT}^{(k)}$
+with $p_1 + \cdots + p_k = 1$. We have already seen
+that $\tau^p_k (\lambda \cdot a) = \tau^p_k (a)$ holds. Furthermore $\tau^p_k$
+is surjective, i.e., every probability distribution of size $k$ with only nonzero probabilities is obtained,
+with $(\tau^p_k )^{-1} ((p_1 ,\ldots,p_k )) = {\mathbb{R}}_{>0}\cdot (-\log(p_1 ),\ldots,-\log(p_k ))$.
+\end{enumerate}
+
+\subsection*{7.4~~Estimating tree sizes}
+
+Now we turn to the main application of branching tuples and the $\tau $-function, the
+estimation of tree sizes. We consider rooted trees $(T,r)$, where $T$ is an acyclic
+connected (undirected) graph and $ r$, the root, is a distinguished vertex of $T$. Since
+we are considering only rooted trees here, we speak in the sequel just of ``trees'' $T$
+with root rt$(T)$ and vertex set $V (T)$. We use \#nds$(T) := |V (T)|$ for the number
+of nodes of $T$, while \#lvs$(T) := |$lvs$(T)|$ denotes the number of leaves of $T$.
+
+\subsubsection*{7.4.1~~Notions for trees}
+
+For a node $v \in V (T)$ let $d_T (v)$ be the {\it depth} of $v$ (the length of the path from
+the root to $v$), and for $i \in \{0,\ldots,{\rm d}(v)\}$ let $T(i,v)$ be the vertex with depth $i$ on
+the path from the root to $v$ (so that $T(0,v) = {\rm rt}(T) $ and $T({\rm d}(v),v) = v)$. For a
+node $v \in V (T)$ we denote by $T_v$ the subtree of $T$ with root $v$. Before turning to
+our main subject, measuring the size of trees, some basic strategic ideas should
+be pointed out:
+\begin{itemize}
+\item Trees are considered as ``static'', that is, as given, not as evolving; the
+main advantage of this position is that it enables us to consider the ``real''
+backtracking trees, in contrast to the standard method of ignoring the real
+object and only to consider approximations given by recursion equations.
+
+\item The number of leaves is a measure easier to handle than the number of nodes: When combining trees under a new root, the number of leaves
+behaves additively, while the number of nodes is bigger by one node (the
+new root) than the sum. Reductions, which correspond to nodes with only
+a single successor, are being ignored in this way. For binary trees (every
+inner node as exactly two children) we have \#nds$(T) = 2\#{\rm lvs}(T)-1$. And
+finally, heuristics in a SAT solver aim at reducing the number of conflicts
+found, that is, the number of leaves.
+
+\item All leaves are treated equal (again, this corresponds to the point of view of
+the heuristics).
+\end{itemize}
+
+
+\subsubsection*{7.4.2~~Adorning trees with probability distributions}
+
+Consider a finite probability space $(\Omega ,P)$, i.e., a finite set $\Omega$  of ``outcomes'' to-
+gether with a probability assignment $P : \Omega  \to [0,1]$ such that
+$\sum_{\omega \in \Omega} P(\omega ) = 1$; we
+assume furthermore that no element has zero probability ($\forall\omega \in \Omega  : P(\omega ) > 0$).
+The random variable $P^{-1}$ on the probability space $(\Omega ,P)$ assigns to every outcome $\omega$ the value $P(\omega )^{-1} $, and a trivial calculation shows that the expected value
+of $P$ is the number of outcomes:
+\begin{align}
+\E(\P^{-1} ) =\sum_{\omega \in \Omega}
+P(\omega )P(\omega )^{-1} = |\Omega |.
+\end{align}
+
+So the random variable $P^{-1}$ associates to every outcome $\omega$ a guess $P^{-1} (\omega )$ on
+the (total) number of outcomes, and the expected value of these guesses is the
+true total number of all outcomes. Thus, via sampling of $P^{-1}$ we obtain an
+estimation on $|\Omega |$. In the general context this seems absurd, since the probabilities
+of outcomes are normally not given a priori, however in our application, where
+the outcomes of the probability experiment are the leaves of the search tree, we
+have natural ways at hand to calculate for each outcome its probability. We
+remark that for $ r \in \mathbb{R}_{\geq 1}$ from (7) we get for the $r$-th moment the lower bound
+$\E((P^{-1} )^ r ) = \E((P^{-r} )) \geq |\Omega |^ r$ (by Jensen's inequality).
+
+{\bf Definition 7.4.1.} For trees $T$ we consider {\it tree probability distributions} $\mathfrak{P}$, which
+assign to every edge $(v,w)$ in $T$ a probability $\mathfrak{P}((v,w)) \in [0,1]$ such that for all
+inner nodes $v$ we have $\sum_{w\in {\rm ds}_ T (v)} \mathfrak{P}((v,w)) = 1$, that is, the sum of outgoing
+probabilities is 1; we assume furthermore, that no edge gets a zero probability.
+We obtain the associated probability space $(\Omega_ T ,\P)$, where $\Omega_T := {\rm lvs}(T)$, that is,
+the outcomes are the leaves of $T$, which have probability
+\begin{align}
+\P(v) :=\prod^{{\rm d}(v)-1}_{i=0}\mathfrak{P}((T(i,v),T(i + 1,v))).
+\end{align}
+
+The edge-probabilities being non-zero just means that no outcome in this
+probability space has zero probability (which would mean it would be ignored).
+
+Equation (8) makes sense for any vertex $v \in V (T)$, and $\P(v)$ is then to be
+interpreted as the event that an outcome is a leaf in the subtree of $T$ with root $v$
+(that is, $\P(v) =\sum_{w\in {\rm lvs}(T_ v )} \P _T (w))$; however we emphasise that the values $\P(v)$
+for inner nodes $v$ are only auxiliary values. From (7) we obtain:
+
+{\bf Lemma 7.4.1.} For every finite rooted tree $T$ and every tree probability distribution $\mathfrak{P}$ for $T$ we have for the associated probability space $\Omega_T$ and the random
+variable $\P^{-1} : \Omega_T \to [0,1]$:
+\[
+\min \P^{-1} = \min_{v\in {\rm lvs}(T)}\P(v)^{-1} \leq \#{\rm lvs}(T) = \E(\P^{-1} ) \leq \max_{v\in {\rm lvs}(T)}
+\P(v)^{-1} = \max \P^{-1} .
+\]
+
+{\bf Corollary 7.4.2.} Under the assumptions of Lemma 7.4.1 the following assertions
+are equivalent:
+
+\begin{enumerate} 
+\item $\min \P^{-1} = \#{\rm lvs}(T)$.
+
+\item $\#{\rm lvs}(T) = \max \P^{-1} $.
+
+\item $\P$ is a uniform distribution (all leaves have the same probability).
+\end{enumerate}
+
+Lemma 7.4.1 opens up the following possibilities for estimating the size of a
+tree $T$, given a tree probability distribution $\mathfrak{P}$:
+
+\begin{enumerate}
+\item Upper bounding $\max \P^{-1}$ we obtain an upper bound on $\#{\rm lvs}(T)$, while
+lower bounding $\min \P^{-1}$ we obtain a lower bound on $\#{\rm lvs}(T)$.
+
+\item Estimating $\E(\P^{-1} )$ by sampling we obtain an estimation of $\#{\rm lvs}(T)$.
+\end{enumerate}
+
+
+{\bf Lemma 7.4.3.} Every finite rooted tree $T$ has exactly one tree probability distribution $\mathfrak P$ which induces a uniform probability distribution ${P}$ on the leaves, and
+this {\bf canonical tree probability distribution} $\mathfrak{CP}_ T$ is given by
+\[
+\mathfrak{CP}_T ((v,w)) =\frac{\#{\rm lvs}(T_w )}{\#{\rm lvs}(T_v )}
+\]
+for $v \in V (T)$ and $w \in {\rm ds}_ T (v)$.
+
+The canonical tree probability distribution $ \mathfrak{CP}_{T_v}$ on a subtree $T_v$ of $T $ (for
+$v \in V (T)$) is simply obtained by restricting $\mathfrak{CP}_T $ to the edges of $T_v$ (without
+change).
+
+\subsubsection*{7.4.3.~~The variance of the estimation of the number of leaves}
+
+
+{\bf Lemma 7.4.4.} For a finite rooted tree $T$, a tree probability distribution $\mathfrak{P}$ on $T$
+and $r \in \mathbb{R}_{\geq 0}$ we can recursively compute the $r$-th moment $\E(\P^{-r} )$ of $\P^{-1}$ by
+\begin{itemize}
+\item If $T$ is trivial (i.e., $\#{\rm nds}(T) = 1$), then we have $\E(\P^{-r}_T) = 1$.
+\item Otherwise $\E(\P^{-r}_T) =\sum_{v\in {\rm ds}({\rm rt}(T))} \mathfrak{P}_T (({\rm rt}(T),v))^{1-r}\cdot \E(\P^{-r}_{T_v} )$.
+\end{itemize}
+
+
+{\bf Lemma 7.4.5.} For a finite rooted tree $T$ and a tree probability distribution $\mathfrak{P}$
+on $T$, which fulfils $\mathfrak{P}^{-1}_T\leq \alpha \cdot \mathfrak{CP}^{-1}_T$
+for some $\alpha \in \mathbb{R}_{\geq 1}$, we have $\E(\P^{-r}_T) \leq
+\alpha^{(r-1)\cdot {\rm ht}(T)} \cdot \#{\rm lvs}(T)^r$ for all $r \in \mathbb{R}_{\geq 1}$.
+
+{\bf Corollary 7.4.6.} Under the same assumptions as in Lemma 7.4.5 we have
+\[
+{\rm Var}(\P^{-1}_T) \leq (\alpha ^{{\rm ht}(T)} - 1) \cdot \#{\rm lvs}(T) ^2 .
+\]
+
+\subsubsection*{7.4.4~~The tau-method}
+
+
+{\bf Definition 7.4.2.} A {\it distance} $d$ on a finite rooted tree $T$ is a map $d : E(T) \to  \mathbb{R}_{>0}$
+which assigns to every edge $(v,w)$ in $T$ a positive real number, while a {\it measure} is
+a map $\mu : V (T) \to \mathbb{R}$ such that $\Delta \mu$ is a distance, where $\Delta \mu ((v,w)) := \mu (v)-\mu (w)$.
+For a distance $ d$ we define the measures $\min \Sigma d$ and $\max \Sigma d$ on $T$, which assign
+to every vertex $v \in V (T)$ the minimal resp. maximal sum of $d$-distances over all
+paths from $v$ to some leave.
+
+The $\tau $-function yields a canonical method to associate a tree probability distribution to a distance on a tree as follows.
+
+{\bf Definition 7.4.3.} Consider a rooted tree $T$ together with a distance $d$. For an
+inner node $v$ of $T$ we obtain an associated branching tuple $d(v)$ modulo permutation; assuming that $T$ is ordered, i.e., we have a sorting ${\rm ds} _T (v) = \{v_1 ,\ldots,v_k\}$, we
+obtain a concrete branching tuple $d(v) := (d(v,v_1 ),\ldots,d(v,v_k))$. The associated
+tree probability distribution $\mathfrak{P}_ d$ is given by
+\[
+\mathfrak{P} _d ((v,v _i )) := \tau^\p (d(v))_ i
+\]
+(recall Definition 7.3.6).
+
+By definition we have for $\lambda \in \mathbb{R}_{>0}$ that $\mathfrak{P}_{\lambda \cdot d} = \mathfrak{P} _d$. By Remark 3 to Definition
+7.3.6 for every tree probability distribution $\mathfrak{P}$ for $T$ there exist distances $d$ on $T$
+with $\mathfrak{P} = \mathfrak{P}_ d $, and $d$ is unique up to scaling of the branching tuples at each inner
+node (but each inner node can be scaled differently).
+
+
+{\bf Definition 7.4.4.} For a rooted tree $(T,r)$ with a distance $d$ let $\min\tau (d) :=
++\infty$ and $\max\tau (d) := 1$ in case $T$ is trivial (consists just of $r$), while otherwise
+$\min\tau (d) := \min _{v\in V (T)\backslash{\rm lvs}(T)} \tau (d(v))$ and $\max\tau (d) := \max _{v\in V (T)\backslash{\rm lvs}(T)} \tau (d(v))$.
+
+{\bf Lemma 7.4.7.} Consider a rooted tree $(T,r)$ together with a distance $d$. For the
+induced probability distribution $\P _d$ on the leaves of $T$ we have:
+
+\begin{enumerate}
+\item $(\min\tau (d))^{\min \Sigma d(r)} \leq \min \P^{-1}_d$.
+
+\item  $\max \P^{-1}_d\leq (\max\tau (d))^{\max \Sigma d(r)}$.
+
+\end{enumerate}
+{\it Proof.} ({\bf To be continuted, the proof needs to be understood, then try Part 2})  If $T$ is trivial then
+the assertion is trivial, so assume that $T$ is non-trivial. Let $\tau _0 := \min\tau (d)$.
+\[
+\min \P^{-1}_d= \min_{v\in {\rm lvs}(T)}\P_d (v)^{-1} = \min_{v\in {\rm lvs}(T)}\prod ^{d(v)-1}_{i=0}
+\mathfrak{P}_d (T(i,v),T(i + 1,v))^{-1} =
+\]
+\[
+\min_{v\in {\rm lvs}(T)}\prod^{d(v)-1}_{i=0}\tau (d(T(i,v)))^{d(T(i,v),T(i+1,v))} \leq
+\]
+\[
+\min_{v\in {\rm lvs}(T)}\prod^{d(v)-1}_{i=0}\tau^{d(T(i,v),T(i+1,v))}_0= \min_{v\in {\rm lvs}(T)}
+\tau^{\sum^{ d(v)-1}_{i=0}d(T(i,v),T(i+1,v))}_0= \tau^{ \min \Sigma d(r)}_0.
+\]\hfill$\Box$
+
+
+{\bf Theorem 7.4.8.} Consider a rooted tree $(T,r)$. For a distance $d$ on $(T,r)$ we
+have
+\[
+(\min\tau (d))^{\min \Sigma d(r)} \leq \#{\rm lvs}(T) \leq (\max\tau (d))^{\max \Sigma d(r)}.
+\]
+And for a measure $\mu$ on $(T,r)$ which is 0 on the leaves we have
+\[
+(\min\tau (\Delta \mu ))^{\mu (r)}\leq \#{\rm lvs}(T) \leq (\max\tau (\Delta \mu ))^{\mu (r)}.
+\]
+
+
+
+
+\end{document}
