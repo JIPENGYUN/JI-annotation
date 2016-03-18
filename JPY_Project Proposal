@@ -23,7 +23,14 @@
 To accomplish the final report, the structure is built by several "Todos..".
 
   \begin{enumerate}
-    \item \ldots
+    \item to meet Oliver twice a week to communicate.
+    \item Lock the target "Branching Heuristics" of Handbook Chapter. Start with
+    \begin{enumerate}[a)]
+      \item Introduction.(abstract, definitions, Lemmas)
+      \item Missing proofs of Theorems.
+    \end{enumerate}
+    \item Seeking break points of the proposal from Handbook Chapter while reading and writing.
+    
     \item \ldots
   \end{enumerate}
   
