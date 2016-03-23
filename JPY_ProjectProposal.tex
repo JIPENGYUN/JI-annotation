@@ -9,43 +9,193 @@
 
 
 \begin{document}
-
-\title{Initial Document\\Heuristics for SAT solvers}
-\author{Ji Pengyun\\
-  \href{http://www.swan.ac.uk/compsci/}{Computer Science Department}, \href{http://www.swan.ac.uk/science/}{College of Science}\\
-   \href{http://www.swan.ac.uk/}{Swansea University, UK}\\
-  %{\small \url{http://www.swan.ac.uk/NOT_YET}}
-}
-
-\maketitle
-
-\tableofcontents
-
-\chapter{General plans}
-\label{cha:Generalpreparations}
-
-
-To accomplish the initial report, planning uses ``Todos'':
-\begin{enumerate}
-	\item To meet Oliver twice a week to communicate:
-	\begin{enumerate}[Week 1]
-		\item 21/3/2016 - 27/3/2016: XXX
-	\end{enumerate}
-	\item Integrate Latex-structure, either by appropriate copying or by using directly Annotations.
-	\item Looking into the paper ``Fundaments of Branching Heuristics'' of Handbook Chapter 7 (O.Kullmann, 2009). Start with
+	
+	\title{Initial Document\\Heuristics for SAT solvers}
+	\author{Ji Pengyun\\
+		\href{http://www.swan.ac.uk/compsci/}{Computer Science Department}, \href{http://www.swan.ac.uk/science/}{College of Science}\\
+		\href{http://www.swan.ac.uk/}{Swansea University, UK}\\
+		%{\small \url{http://www.swan.ac.uk/NOT_YET}}
+	}
+	
+	\maketitle
+	
+	\tableofcontents
+	
+	\chapter{General plans}
+	\label{cha:Generalpreparations}
+	
+	
+	To accomplish the initial report, planning uses ``Todos'':
 	\begin{enumerate}
-		\item Missing proofs of Theorems:
-		\begin{enumerate}
-			\item XXX
+		\item To meet Oliver twice a week to communicate:
+		\begin{enumerate}[Week 1]
+			\item 21/3/2016 - 27/3/2016: XXX
 		\end{enumerate}
-	\end{enumerate}
-	\item Working through Chapter 7:
-	\begin{enumerate}
-		\item XXX
-	\end{enumerate}
-	\item Algorithm and efficient implementation of $\tau(a,b)$ XXX
-\end{enumerate}
-
-
-
-\end{document}
+		\item Integrate Latex-structure, either by appropriate copying or by using directly Annotations.
+		\item Looking into the paper ``Fundaments of Branching Heuristics'' of Handbook Chapter 7 (O.Kullmann, 2009). Start with
+		\begin{enumerate}
+			\item Missing proofs of Theorems:
+			\begin{enumerate}
+				\item XXX
+			\end{enumerate}
+		\end{enumerate}
+		\item Working through Chapter 7:
+		\begin{enumerate}
+			\item {\bf The Definitions of handbook chapter.}
+			
+			{\defi $\mathcal{BT} :=\bigcup_{k\in \mathbb{N}}(\mathbb{R}_{>0})^k$}
+			denotes the set of {\bf branching tuples}.
+			
+			Remarks:
+			
+			\begin{enumerate}
+				\item  Basic measurements for branching tuples are minimum $\min: \mathcal{BT} \to \mathbb{R}_{>0}$,
+				maximum $\max : \mathcal{BT} \to \mathbb{R}_{>0}$, sum $\Sigma : \mathcal{BT} \to \mathbb{R}_{>0}$, and width $|| : \mathcal{BT} \to \mathbb{N}$.
+				The minimum $\min(a)$ of a branching tuple is a ``worst-case view'', while
+				max($a$) is a ``best-case view''. In general, disregarding the values, the
+				larger $|a|$, i.e., the wider the branching is, the worse it is.
+				
+				\item The set of branching tuples of width $k$ is ${\mathcal{BT}}^{{(k)}}:= \{t \in \mathcal{BT} : |t| = k\}$,
+				which is a {\it cone}, that is for $a \in \mathcal{BT}^{(k)}$ and $\lambda \in \mathbb{R}_{>0}$ we have $\lambda \cdot t \in \mathcal{BT}^{(k)} $, and for $a,b \in \mathcal{BT}^{(k)}$ we have $a + b \in \mathcal{BT}^{(k)}$.
+				
+				\item Branching tuples of width 1, which do not represent ``real branchings'' but
+				``reductions'', are convenient to allow.
+				
+				\item One could also allow the empty branching tuple as well as the zero branching tuple (0) (of width 1), but for the sake of simplicity we abstain from
+				such systematic extensions here.
+			\end{enumerate}
+			
+			
+			{\defi Define $\chi _k : \mathcal{BT} \times \mathbb{R}_{>0} \to \mathbb{R}_{>0}$ by $\chi (t,x) :=
+				\sum^{|t|}_{i=1} x^{-t_i}$. Observe
+				that for each $t \in \mathcal{BT}$ the map $\chi (t,-) : \mathbb{R}_{>0} \to \mathbb{R}_{>0}$ is strictly decreasing with
+				$\chi (t,1) = |t| \geq 1$ and $\lim _{x\to \infty} \chi (t,x) = 0$. Now $\tau : \mathcal{BT} \to \mathbb{R}_{\geq 1} $ is defined as the
+				unique $\tau (t) := x_0 \in\mathbb{R}_{\geq 1} $ such that $\chi (t)(x_0 ) = 1$ holds.}
+			
+			By definition we have $\tau (t) \geq 1$, with $\tau (t) = 1 \Leftrightarrow |t| = 1$. For $k \in \mathbb{N} $ we denote
+			by $\tau_k : \mathcal{BT}^{(k)}
+			\to \mathbb{R}_{\geq 1} $ the $\tau $-function restricted to branching tuples of width $k$.
+			
+			
+			{\lem For every $a \in \mathcal{BT} , k \in \mathbb{N}$ and $\lambda \in \mathbb{R}_{>0}$ we have:
+				
+				\begin{enumerate}
+					\item[1.]$\tau (\lambda \cdot a) = \tau (a)^{1/\lambda} $.
+					
+					\item[2.] $\tau_k (\vec{1}) = k$.
+					
+					\item[3.] $\tau_k$ for $k \geq 2$ is strictly decreasing in each component.
+					
+					\item[4.] $\tau_k$ is symmetric, that is, invariant under permutation of branching tuples.
+					
+					\item[5.] $\tau (a)^{\min(a)} \leq |a| \leq \tau (a)^{\max(a)}$, that is, $|a|^{1/\max(a)} \leq \tau (a) \leq |a|^{1/\min(a)}$.
+					
+					\item[6.] $\lim_{\lambda \to 0} \tau (a;(\lambda )) = \infty$ and $\lim _{\lambda \to \infty }\tau (a;(\lambda )) = \tau (a)$.
+				\end{enumerate}}
+				
+				The $\tau $-function fulfils powerful convexity properties, from which non-trivial
+				further properties will follow. A function $f : C \to \mathbb{R}$ defined on some convex
+				subset $C \subseteq \mathbb{R}^k$ is called ``strictly convex'' if for all $x,y \in C$ and $0 < \lambda < 1 $ holds
+				$f(\lambda x+(1-\lambda )y) < \lambda f(x)+(1-\lambda )f(y)$; furthermore $f$ is called ``strictly concave''
+				if $-f$ is strictly convex. By definition $\tau_1$ is just the constant function with value
+				1, and so doesn't need to be considered here.
+				
+				{\bf Bounds on the tau-function}
+				
+				Just from being symmetric and strictly convex it follows, that $\tau_k (a)$ for tuples a
+				with a given fixed sum $\Sigma (a) = s$ attains its strict minimum for the constant tuple
+				(with entries $\frac sk $); Thus, using $\mathfrak{A}(t) :=
+				\sum(t)/|t|$ for the arithmetic mean of a branching tuple, we have $\tau (\mathfrak{A}(t) \cdot \vec{1}) \leq \tau (t)$ (with
+				strict inequality iff $t$ is not constant).
+				
+				\begin{enumerate}
+					\item The {\it arithmetic mean}, the {\it geometric mean}, and the {\it harmonic mean} of
+					branching tuples $t$ are denoted respectively by $\mathfrak{A}(t) :=\frac1{|t|} \Sigma (t) =
+					\frac1{|t|}\sum^{|t|}_{i=1} t_i$,
+					$\mathfrak{G}(t) :=\sqrt[|t|]{\prod^n_{i=1} t_ i}$
+					and $\mathfrak{H}(t) := |t|/(\sum^n_{i=1}\frac1{t_i})$. We recall the well-known
+					fundamental inequality between these means: $\mathfrak{H}(t) \leq \mathfrak{G}(t) \leq \mathfrak{A}(t)$ (where
+					strict inequalities hold iff $t$ is not constant).
+					
+					\item More generally we have the {\it power means} for $\alpha \in \overline{\mathbb{R}}$ given by $\mathfrak{M} _\alpha (t) :=(\frac1{|t|}\sum^{|t|}_{i=1} t^\alpha_i)^{1/\alpha}$
+					for $\alpha \notin \{-\infty ,0,+\infty \}$, while we set $\mathfrak{M} _{-\infty} (t) := \min(t)$,
+					$\mathfrak{M}_ 0 (t) := \mathfrak{G}(t)$ and $\mathfrak{M} _{+\infty} (t) := \max(t)$. By definition we have $\mathfrak{M}_{{-1}} (t) =
+					\mathfrak{H}(t)$ and $\mathfrak{M}_ 1 (t) = \mathfrak{A}(t)$. In generalisation of the above fundamental inequality we have for $\alpha $, $\alpha ' \in \overline{\mathbb{R}}$ with $\alpha < \alpha '$ the inequality $\mathfrak{M} _\alpha (t) \leq \mathfrak{M} _{\alpha ' } (t)$,
+					which is strict iff $t$ is not constant.
+				\end{enumerate}
+				{\defi Consider $k \in \mathbb{N}$. A {\bf mean} is a map $M : \mathcal{BT}^{(k)}
+					\to\mathbb{R}_{ >0}$
+					which is continuous, strictly monotonic increasing in each coordinate, symmetric
+					(i.e., invariant under permutation of the arguments) and ``consistent'', that is,
+					$\min(a) \leq M(a) \leq \max(a)$ for $a \in \mathcal{BT}^{(k)}$. A mean $M$ is {\bf homogeneous} if $M $ is
+					positive homogeneous, i.e., for $\lambda \in \mathbb{R}_{ >0}$ and $a \in \mathcal{BT}^{(k)}$
+					we have $M(\lambda \cdot a) = \lambda \cdot M(a)$.}
+				
+				All power means are homogeneous means. Yet $k$-ary means $M$ are only
+				defined for tuples of positive real numbers $a \in \mathbb{R}_{ >0}^ k
+				$, and we extend this as follows
+				to allow arguments 0 or $+\infty $, using the extended real line $\overline{\mathbb{R}} = {\mathbb{R}} \cup \{\pm \infty \}$. We
+				say that $M$ is defined for $a \in \overline{\mathbb{R}}_{ \leq0}^ k$
+				(allowing positions to be 0 or $+\infty $) if the
+				limit $\lim _{a ' \to a,a' \in \mathbb{R}_{>0}^k} M(a')$ exists in $\overline{\mathbb{R}}$, and we denote this limit by $M(a)$ (if the
+				limit exists, then it is unique). Power means $ \mathfrak{M} _\lambda (a)$ for $\lambda \neq0$ are defined for all
+				$a \in \overline{\mathbb{R}}_{ \leq0}^ k$, while $\mathfrak{M}_ 0 (a) = \mathfrak{G}(a)$ is defined iff there are no indices $i,j $ with $a_i= 0$
+				and $a _j = \infty $.
+				
+				{\defi Consider a mean $M : \mathcal{BT}^{(k)}
+					\to {\mathbb{R}}_{>0}$. We say that $M$ is $\infty ${\bf -dominated} resp. 0{\bf -dominated} if for every $a \in \overline{\mathbb{R}}_{ \geq0}^ k$, such that an index $i$ with
+					$a _i = \infty$ resp. $a_ i = 0$ exists, $M(a)$ is defined with $M(a) = \infty$ resp. $M(a) = 0$. On
+					the other hand, $M$ {\bf ignores} $\infty$ resp. {\bf ignores} 0 if $M(a;(\infty ))$ resp. $M(a;(0))$ is
+					defined iff $M(a)$ is defined with $M(a;(\infty )) = M(a)$ resp. $M(a;(0)) = M(a)$.}
+				
+				
+				Power means $\mathfrak{M} _\lambda$ with $\lambda > 0$ are $\infty $-dominated and ignore 0, while for $\lambda < 0$
+				they are 0-dominated and ignore $\infty $. The borderline case $\mathfrak{M}_ 0 = \mathfrak{G}$ is $\infty $-dominated
+				as well as 0-dominated if only tuples are considered for which $\mathfrak{G}$ is defined (and
+				thus we do not have to evaluate ``$0 \cdot \infty $'').
+				
+				Another important properties of means is convexity resp. concavity. Power
+				means $\mathfrak{M }_\alpha$ with $\alpha > 1$ are strictly convex, while power means $\mathfrak{M}_\alpha$ with $\alpha < 1$ are
+				strictly concave; the borderline case $\mathfrak{M}_1 = \mathfrak{A}$ is linear (convex and concave).
+				
+				{\lem For every concave mean $M$ we have $\mathfrak{M} \leq \mathfrak{A}$.}
+				
+				{\prf By Jensen's inequality we have $M(a) =\sum_{\pi \in S_k}\frac1{k!} M(\pi * a) \leq
+					M( \sum_{\pi \in S_k}\frac1{k!}\cdot (\pi * a)) = M(\mathfrak{A}(a) \cdot \vec{1}) = \mathfrak{A}(a)$.} \hfill  $\Box$
+				
+				{\bf Jensen's Inequality}
+				
+				If $p_1,\ldots,p_n$ are positive numbers which sum to 1 and $f$ is a real
+				continuous function that is convex, then
+				\begin{equation}
+				f\left(\sum^n_{i=1}p_ix_i\right) \leq \sum^{n}_{i=1}p_if(x_i).
+				\end{equation}
+				
+				If $f$ is concave, then the inequality reverses, giving
+				\begin{equation}
+				f\left(\sum^n_{i=1}p_ix_i\right) \geq \sum^{n}_{i=1}p_if(x_i).
+				\end{equation}
+				
+				The special case of equal $p_i=1/n$ with the concave function $\ln x$ gives
+				\begin{equation}
+				\ln\left(\frac1n\sum^n_{i=1}x_i\right) \geq \frac1n\sum^{n}_{i=1}\ln x_i,
+				\end{equation}
+				
+				
+				which can be exponentiated to give the arithmetic mean-geometric mean inequality
+				\begin{equation}
+				\frac{x_1+x_2+\ldots + x_n}{n}\geq \sqrt[n]{x_1x_2\cdots x_n}.
+				\end{equation}
+				
+				Here, equality holds iff $x_1=x_2=\ldots = x_n$.
+				
+				
+				
+				
+			\end{enumerate}
+			\item Algorithm and efficient implementation of $\tau(a,b)$ XXX
+		\end{enumerate}
+		
+		
+		
+	\end{document}
