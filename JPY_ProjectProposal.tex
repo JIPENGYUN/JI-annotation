@@ -6,6 +6,9 @@
 \usepackage[all]{xy}
 \usepackage{enumerate}
 \usepackage{xr}
+\def\p{{\rm p}}
+\def\E{{\rm E}}
+\def\P{{\rm P}}
 
 
 \begin{document}
@@ -193,9 +196,211 @@
 				
 				
 			\end{enumerate}
-			\item Algorithm and efficient implementation of $\tau(a,b)$ XXX
-		\end{enumerate}
-		
-		
-		
-	\end{document}
+			
+			{\bf Associating probability distributions with branching tuples}
+			
+			{\defi Given a branching tuple $a = (a_1 ,\ldots,a_k )$, the branching tuple
+				$\tau^\p (a) \in \mathcal{BT}^{(k)}$ is defined by $\tau^\p (a) _i := \tau (a) ^{-a_i}$ for $i \in \{1,\ldots,k\}$.}
+			
+			Remarks:
+			
+			\begin{enumerate}
+				\item By definition we have $\Sigma (\tau^\p (a)) = 1$, and thus $\tau^\p (a)$ represents a probability distribution (on $\{1,\ldots,k\}$).
+				
+				\item  For $\lambda \in {\mathbb{R}}_{>0}$ we have $\tau^\p (\lambda \cdot a) = \tau^\p (a)$, and thus $\tau^\p (a) $ only depends on
+				the relative sizes of the entries $a_ i$, and not on their absolute sizes.
+				
+				\item  For fixed $k$ we have the map $\tau^p_k: \mathcal{BT}^{(k)}\to {\rm int}(\sigma_{k-1} ) \subset \mathcal{BT}^{(k)}$
+				from the set
+				of branching tuples $(a_1 ,\ldots,a_k )$ of length $k$ to the interior of the $(k - 1)$-dimensional standard simplex $\sigma_{k-1}$, that is, to the set of all branching
+				tuples $(p_1 ,\ldots,p_k ) \in \mathcal{BT}^{(k)}$
+				with $p_1 + \cdots + p_k = 1$. We have already seen
+				that $\tau^p_k (\lambda \cdot a) = \tau^p_k (a)$ holds. Furthermore $\tau^p_k$
+				is surjective, i.e., every probability distribution of size $k$ with only nonzero probabilities is obtained,
+				with $(\tau^p_k )^{-1} ((p_1 ,\ldots,p_k )) = {\mathbb{R}}_{>0}\cdot (-\log(p_1 ),\ldots,-\log(p_k ))$.
+			\end{enumerate}
+			
+			{\bf Notions for trees}
+			
+			For a node $v \in V (T)$ let $d_T (v)$ be the {\it depth} of $v$ (the length of the path from
+			the root to $v$), and for $i \in \{0,\ldots,{\rm d}(v)\}$ let $T(i,v)$ be the vertex with depth $i$ on
+			the path from the root to $v$ (so that $T(0,v) = {\rm rt}(T) $ and $T({\rm d}(v),v) = v)$. For a
+			node $v \in V (T)$ we denote by $T_v$ the subtree of $T$ with root $v$. Before turning to
+			our main subject, measuring the size of trees, some basic strategic ideas should
+			be pointed out:
+			\begin{itemize}
+				\item Trees are considered as ``static'', that is, as given, not as evolving; the
+				main advantage of this position is that it enables us to consider the ``real''
+				backtracking trees, in contrast to the standard method of ignoring the real
+				object and only to consider approximations given by recursion equations.
+				
+				\item The number of leaves is a measure easier to handle than the number of nodes: When combining trees under a new root, the number of leaves
+				behaves additively, while the number of nodes is bigger by one node (the
+				new root) than the sum. Reductions, which correspond to nodes with only
+				a single successor, are being ignored in this way. For binary trees (every
+				inner node as exactly two children) we have \#nds$(T) = 2\#{\rm lvs}(T)-1$. And
+				finally, heuristics in a SAT solver aim at reducing the number of conflicts
+				found, that is, the number of leaves.
+				
+				\item All leaves are treated equal (again, this corresponds to the point of view of
+				the heuristics).
+			\end{itemize}
+			
+			{\bf Adorning trees with probability distributions}
+			
+			Consider a finite probability space $(\Omega ,P)$, i.e., a finite set $\Omega$  of ``outcomes'' to-
+			gether with a probability assignment $P : \Omega  \to [0,1]$ such that
+			$\sum_{\omega \in \Omega} P(\omega ) = 1$; we
+			assume furthermore that no element has zero probability ($\forall\omega \in \Omega  : P(\omega ) > 0$).
+			The random variable $P^{-1}$ on the probability space $(\Omega ,P)$ assigns to every outcome $\omega$ the value $P(\omega )^{-1} $, and a trivial calculation shows that the expected value
+			of $P$ is the number of outcomes:
+			\begin{align}\label{equation1}
+			\E(\P^{-1} ) =\sum_{\omega \in \Omega}
+			P(\omega )P(\omega )^{-1} = |\Omega |.
+			\end{align}
+			
+			So the random variable $P^{-1}$ associates to every outcome $\omega$ a guess $P^{-1} (\omega )$ on
+			the (total) number of outcomes, and the expected value of these guesses is the
+			true total number of all outcomes. Thus, via sampling of $P^{-1}$ we obtain an
+			estimation on $|\Omega |$. In the general context this seems absurd, since the probabilities
+			of outcomes are normally not given a priori, however in our application, where
+			the outcomes of the probability experiment are the leaves of the search tree, we
+			have natural ways at hand to calculate for each outcome its probability. We
+			remark that for $ r \in \mathbb{R}_{\geq 1}$ from \ref{equation1}we get for the $r$-th moment the lower bound
+			$\E((P^{-1} )^ r ) = \E((P^{-r} )) \geq |\Omega |^ r$ (by Jensen's inequality).
+			
+			{\defi For trees $T$ we consider {\it tree probability distributions} $\mathfrak{P}$, which
+				assign to every edge $(v,w)$ in $T$ a probability $\mathfrak{P}((v,w)) \in [0,1]$ such that for all
+				inner nodes $v$ we have $\sum_{w\in {\rm ds}_ T (v)} \mathfrak{P}((v,w)) = 1$, that is, the sum of outgoing
+				probabilities is 1; we assume furthermore, that no edge gets a zero probability.
+				We obtain the associated probability space $(\Omega_ T ,\P)$, where $\Omega_T := {\rm lvs}(T)$, that is,
+				the outcomes are the leaves of $T$, which have probability
+				\begin{align}
+				\P(v) :=\prod^{{\rm d}(v)-1}_{i=0}\mathfrak{P}((T(i,v),T(i + 1,v))).
+				\end{align}
+				
+				The edge-probabilities being non-zero just means that no outcome in this
+				probability space has zero probability (which would mean it would be ignored).}
+			
+			
+			{\lem For every finite rooted tree $T$ and every tree probability distribution $\mathfrak{P}$ for $T$ we have for the associated probability space $\Omega_T$ and the random
+				variable $\P^{-1} : \Omega_T \to [0,1]$:
+				\[
+				\min \P^{-1} = \min_{v\in {\rm lvs}(T)}\P(v)^{-1} \leq \#{\rm lvs}(T) = \E(\P^{-1} ) \leq \max_{v\in {\rm lvs}(T)}
+				\P(v)^{-1} = \max \P^{-1} .
+				\]}
+			
+			Under the assumptions of lemma 1.0.9 the following assertions are equivalent:
+			
+			\begin{enumerate} 
+				\item $\min \P^{-1} = \#{\rm lvs}(T)$.
+				
+				\item $\#{\rm lvs}(T) = \max \P^{-1} $.
+				
+				\item $\P$ is a uniform distribution (all leaves have the same probability).
+			\end{enumerate}
+			
+			Lemma 1.0.9 opens up the following possibilities for estimating the size of a
+			tree $T$, given a tree probability distribution $\mathfrak{P}$:
+			
+			\begin{enumerate}
+				\item Upper bounding $\max \P^{-1}$ we obtain an upper bound on $\#{\rm lvs}(T)$, while
+				lower bounding $\min \P^{-1}$ we obtain a lower bound on $\#{\rm lvs}(T)$.
+				
+				\item Estimating $\E(\P^{-1} )$ by sampling we obtain an estimation of $\#{\rm lvs}(T)$.
+			\end{enumerate}
+			
+			
+			{\lem Every finite rooted tree $T$ has exactly one tree probability distribution $\mathfrak P$ which induces a uniform probability distribution ${P}$ on the leaves, and
+				this {\bf canonical tree probability distribution} $\mathfrak{CP}_ T$ is given by
+				\[
+				\mathfrak{CP}_T ((v,w)) =\frac{\#{\rm lvs}(T_w )}{\#{\rm lvs}(T_v )}
+				\]
+				for $v \in V (T)$ and $w \in {\rm ds}_ T (v)$.}
+			
+			The canonical tree probability distribution $ \mathfrak{CP}_{T_v}$ on a subtree $T_v$ of $T $ (for
+			$v \in V (T)$) is simply obtained by restricting $\mathfrak{CP}_T $ to the edges of $T_v$ (without
+			change).
+			
+			{\bf The variance of the estimation of the number of leaves}
+			
+			
+			{\lem For a finite rooted tree $T$, a tree probability distribution $\mathfrak{P}$ on $T$
+				and $r \in \mathbb{R}_{\geq 0}$ we can recursively compute the $r$-th moment $\E(\P^{-r} )$ of $\P^{-1}$ by
+				\begin{itemize}
+					\item If $T$ is trivial (i.e., $\#{\rm nds}(T) = 1$), then we have $\E(\P^{-r}_T) = 1$.
+					\item Otherwise $\E(\P^{-r}_T) =\sum_{v\in {\rm ds}({\rm rt}(T))} \mathfrak{P}_T (({\rm rt}(T),v))^{1-r}\cdot \E(\P^{-r}_{T_v} )$.
+				\end{itemize}}
+				
+				
+				{\lem For a finite rooted tree $T$ and a tree probability distribution $\mathfrak{P}$
+					on $T$, which fulfils $\mathfrak{P}^{-1}_T\leq \alpha \cdot \mathfrak{CP}^{-1}_T$
+					for some $\alpha \in \mathbb{R}_{\geq 1}$, we have $\E(\P^{-r}_T) \leq
+					\alpha^{(r-1)\cdot {\rm ht}(T)} \cdot \#{\rm lvs}(T)^r$ for all $r \in \mathbb{R}_{\geq 1}$.}
+				
+				{\bf The tau-method}
+				
+				{\defi A {\it distance} $d$ on a finite rooted tree $T$ is a map $d : E(T) \to  \mathbb{R}_{>0}$
+					which assigns to every edge $(v,w)$ in $T$ a positive real number, while a {\it measure} is
+					a map $\mu : V (T) \to \mathbb{R}$ such that $\Delta \mu$ is a distance, where $\Delta \mu ((v,w)) := \mu (v)-\mu (w)$.
+					For a distance $ d$ we define the measures $\min \Sigma d$ and $\max \Sigma d$ on $T$, which assign
+					to every vertex $v \in V (T)$ the minimal resp. maximal sum of $d$-distances over all
+					paths from $v$ to some leave.}
+				
+				The $\tau $-function yields a canonical method to associate a tree probability distribution to a distance on a tree as follows.
+				
+				{\defi Consider a rooted tree $T$ together with a distance $d$. For an
+					inner node $v$ of $T$ we obtain an associated branching tuple $d(v)$ modulo permutation; assuming that $T$ is ordered, i.e., we have a sorting ${\rm ds} _T (v) = \{v_1 ,\ldots,v_k\}$, we
+					obtain a concrete branching tuple $d(v) := (d(v,v_1 ),\ldots,d(v,v_k))$. The associated
+					tree probability distribution $\mathfrak{P}_ d$ is given by
+					\[
+					\mathfrak{P} _d ((v,v _i )) := \tau^\p (d(v))_ i
+					\]}
+				
+				
+				{\defi For a rooted tree $(T,r)$ with a distance $d$ let $\min\tau (d) :=
+					+\infty$ and $\max\tau (d) := 1$ in case $T$ is trivial (consists just of $r$), while otherwise
+					$\min\tau (d) := \min _{v\in V (T)\backslash{\rm lvs}(T)} \tau (d(v))$ and $\max\tau (d) := \max _{v\in V (T)\backslash{\rm lvs}(T)} \tau (d(v))$.}
+				
+				{\lem Consider a rooted tree $(T,r)$ together with a distance $d$. For the
+					induced probability distribution $\P _d$ on the leaves of $T$ we have:
+					
+					\begin{enumerate}
+						\item $(\min\tau (d))^{\min \Sigma d(r)} \leq \min \P^{-1}_d$.
+						
+						\item  $\max \P^{-1}_d\leq (\max\tau (d))^{\max \Sigma d(r)}$.
+						
+					\end{enumerate}}
+					{\prf If $T$ is trivial then
+						the assertion is trivial, so assume that $T$ is non-trivial. Let $\tau _0 := \min\tau (d)$.
+						\[
+						\min \P^{-1}_d= \min_{v\in {\rm lvs}(T)}\P_d (v)^{-1} = \min_{v\in {\rm lvs}(T)}\prod ^{d(v)-1}_{i=0}
+						\mathfrak{P}_d (T(i,v),T(i + 1,v))^{-1} =
+						\]
+						\[
+						\min_{v\in {\rm lvs}(T)}\prod^{d(v)-1}_{i=0}\tau (d(T(i,v)))^{d(T(i,v),T(i+1,v))} \leq
+						\]
+						\[
+						\min_{v\in {\rm lvs}(T)}\prod^{d(v)-1}_{i=0}\tau^{d(T(i,v),T(i+1,v))}_0= \min_{v\in {\rm lvs}(T)}
+						\tau^{\sum^{ d(v)-1}_{i=0}d(T(i,v),T(i+1,v))}_0= \tau^{ \min \Sigma d(r)}_0.
+						\]\hfill$\Box$}
+					
+					
+					{\thm Consider a rooted tree $(T,r)$. For a distance $d$ on $(T,r)$ we
+						have
+						\[
+						(\min\tau (d))^{\min \Sigma d(r)} \leq \#{\rm lvs}(T) \leq (\max\tau (d))^{\max \Sigma d(r)}.
+						\]
+						And for a measure $\mu$ on $(T,r)$ which is 0 on the leaves we have
+						\[
+						(\min\tau (\Delta \mu ))^{\mu (r)}\leq \#{\rm lvs}(T) \leq (\max\tau (\Delta \mu ))^{\mu (r)}.
+						\]}
+					
+					
+					
+					\item Algorithm and efficient implementation of $\tau(a,b)$ XXX
+				\end{enumerate}
+				
+				
+				
+			\end{document}
